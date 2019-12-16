@@ -49,7 +49,7 @@ class App extends Component {
       imglist: this.basicExampleList,
     };
 
-    this.onBasicExampleChange = _.debounce(this.onBasicExampleChange.bind(this), 1000, {
+    this.onBasicExampleChange = _.debounce(this.onBasicExampleChange.bind(this), 300, {
       leading: true,
       trailing: true
     });
