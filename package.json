@@ -1,7 +1,7 @@
 {
-  "name": "react-search-field",
+  "name": "anzuhanacon",
   "version": "1.0.0",
-  "description": "This is a simple search field component for react",
+  "description": "This is a simple search page for otome domain meme",
   "main": "dist/index.min.js",
   "scripts": {
     "build:component": "rm -rf dist/ && webpack -p --progress --config=webpack.production.config.js",
@@ -12,30 +12,29 @@
   },
   "keywords": [
     "react",
-    "react search",
-    "react search field",
-    "react search component",
-    "searchbar",
-    "search"
+    "ayumi sara",
+    "anzu hana",
+    "otome domain"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/nutboltu/react-search-field.git"
+    "url": "https://github.com/harunene/anzuhanacon.git"
   },
   "dependencies": {
+    "@babel/runtime": "^7.7.6",
     "hangul-js": "^0.2.6",
     "lodash": "^4.17.15",
     "prop-types": "15.7.2",
     "react": "16.6.3",
     "react-dom": "16.6.3",
-    "react-github-btn": "^1.1.1",
     "react-highlight-words": "^0.16.0",
-    "typeco": "1.0.0"
+    "typeco": "^1.0.0"
   },
   "devDependencies": {
     "@babel/core": "7.6.4",
     "@babel/node": "7.6.3",
     "@babel/plugin-proposal-class-properties": "7.5.5",
+    "@babel/plugin-transform-runtime": "^7.7.6",
     "@babel/preset-env": "7.6.3",
     "@babel/preset-react": "7.6.3",
     "babel-loader": "8.0.6",
@@ -57,6 +56,6 @@
     "webpack-cli": "3.3.9",
     "webpack-dev-server": "3.8.2"
   },
-  "author": "Farhad Yasir",
+  "author": "harunene",
   "license": "MIT"
 }
