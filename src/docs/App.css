@@ -1,0 +1,42 @@
+.react-search-field-demo {
+  padding: 20px;
+}
+
+h3, h5 {
+  margin: 20px 0;
+}
+
+ul, li {
+  list-style: none;
+  margin: 0;
+  font-size: 1.25rem;
+  width: 100%;
+}
+
+ul {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+ul > ul {
+  padding: 0px;
+}
+
+.list-example {
+  border: 1px solid #ddd;
+  margin: 15px 0;
+}
+
+.list-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.matched {
+  padding: 0;
+  background-color: yellow;
+}
+
+.anzuhanacon {
+  max-width: 100%;
+}
