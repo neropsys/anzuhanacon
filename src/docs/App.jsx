@@ -21,8 +21,8 @@ const ExampleList = props => {
       </div>
       <div className="list-body">
         {
-          _.take(props.list, 5).map((item, index) => 
-            <a href={item.imgurl}>
+          _.take(props.list, props.imgCnt).map((item, index) => 
+            <a href={item.imgurl} key={index}>
               <ul key={index}>
                 <ul>
                   <Highlighter 
@@ -47,6 +47,7 @@ class App extends Component {
 
     this.state = {
       imglist: this.basicExampleList,
+      imgCnt: 5
     };
 
     this.onBasicExampleChange = _.debounce(this.onBasicExampleChange.bind(this), 1000, {
@@ -66,13 +67,27 @@ class App extends Component {
       this.onBasicExampleChange("");
     })();
   }
+  componentWillMount() {
+    window.addEventListener('scroll', () => {
+      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+        this.setState({
+          ...this.state, imgCnt: this.state.imgCnt + 5
+        });
+      }
+    });
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll');
+  }
 
   onBasicExampleChange(value) {
     const keywords = _.reject(value.toLowerCase().split(' '), _.isEmpty);
 
     this.setState({
       imglist: this.getMatchedList(keywords),
-      keywords: keywords
+      keywords: keywords,
+      imgCnt: 5
     });
   }
 
@@ -97,6 +112,7 @@ class App extends Component {
           <ExampleList
             list={this.state.imglist}
             keywords={this.state.keywords}
+            imgCnt={this.state.imgCnt}
           />
         </div>
       </div>
