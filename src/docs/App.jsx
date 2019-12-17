@@ -1,89 +1,93 @@
 import React, { Component } from 'react';
-import Highlighter from "react-highlight-words";
 import _ from 'lodash';
-// import * as Hangul from 'hangul-js';
 import SyntaxHighlighter from 'react-syntax-highlighter';
-import SearchField from '../components/SearchField';
-
+import SearchField from "react-search-field";
+import ImageList from './ImageList';
 import './App.css';
 
-const ExampleList = props => {
-    const found = !!props.list.length;
-    return <div className="list-example">
-      <div className="list-body" style={ found ? {} : { display: 'none' } }>
-        <ul>{props.list.length} 개의 결과가 있습니다.</ul>
-      </div>
-      <div className="list-body" style={ !found && props.keywords ? {} : { display: 'none' } }>
-        <ul>결과가 없어요 ㅠㅠ</ul>
-      </div>
-      <div className="list-body" style={ !found && !props.keywords ? {} : { display: 'none' } }>
-        <ul>로딩중입니다...</ul>
-      </div>
-      <div className="list-body">
-        {
-          _.take(props.list, 5).map((item, index) => 
-            <a href={item.imgurl}>
-              <ul key={index}>
-                <ul>
-                  <Highlighter 
-                    highlightClassName="matched"
-                    searchWords={props.keywords || []}
-                    textToHighlight={item.name || ""}
-                  />
-                </ul>
-                <img className="anzuhanacon" src={item.imgurl} />
-              </ul>
-            </a>
-          )
-        }
-      </div>
-    </div>
-  };
 
 class App extends Component {
   constructor(props) {
     super(props);
-    this.basicExampleList = [];
+    this.allList = [];
 
     this.state = {
-      imglist: this.basicExampleList,
+      matchedlist: [],
+      imgcnt: 5
     };
 
-    this.onBasicExampleChange = _.debounce(this.onBasicExampleChange.bind(this), 300, {
+    this.onKeywordChanged = _.debounce(this.onKeywordChanged.bind(this), 300, {
       leading: true,
       trailing: true
     });
   }
 
-  componentDidMount(){
-    (async() => {
-      const data = await fetch('https://api.github.com/repos/astrine/eroge_radio/contents/img/')
-      this.basicExampleList = (await data.json()).map(value => ({
-          name: value.name.substring(0, value.name.lastIndexOf('.')),
-          lowerCaseName: value.name.substring(0, value.name.lastIndexOf('.')).toLowerCase(),
-          imgurl: value.download_url
-      }));
-      this.onBasicExampleChange("");
-    })();
+  async componentDidMount(){
+    const data = await fetch('https://api.github.com/repos/astrine/eroge_radio/contents/img/')
+    this.allList = (await data.json()).map(value => ({
+        name: value.name.substring(0, value.name.lastIndexOf('.')),
+        src: value.download_url
+    }));
+    this.onKeywordChanged("");
+  }
+  
+  componentWillMount() {
+    window.addEventListener('scroll', () => {
+      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+        this.setState({
+          ...this.state, imgcnt: this.state.imgcnt + 5
+        });
+      }
+    });
   }
 
-  onBasicExampleChange(value) {
-    const keywords = _.reject(value.toLowerCase().split(' '), _.isEmpty);
+  componentWillUnmount() {
+    window.removeEventListener('scroll');
+  }
 
+  async onKeywordChanged(keyword) {
+    const keywords = keyword.toLowerCase().split(' ').filter(_ => _);
+
+    // const getSize = (url) => 
+    //   new Promise((resolve, reject) => {
+    //     const img = new Image();
+        
+    //     img.onerror = reject;
+    //     img.onload = () => {
+    //       const {width, height} = img;
+    //       console.log({width, height})
+    //       resolve({width, height});
+    //     };
+    //     img.src = url;
+    //   });
+
+    const matchedlist = this.getMatchedList(keywords);
+
+    // const imglist = await Promise.all(
+    //   this.matchedlist.map( 
+    //     async (imginfo, idx) => {
+    //       if (idx < imgcnd)
+    //       return { ...(idx < imgcnd ? await getSize(imginfo.src) : { width: 0, height: 0 }), ...imginfo };
+    //     } 
+    //   ));
+    
     this.setState({
-      imglist: this.getMatchedList(keywords),
-      keywords: keywords
+      matchedlist,
+      keywords,
+      imgcnt: 5
     });
   }
 
   getMatchedList(keywords) {
-    if (!keywords) return this.basicExampleList;
-    return _(this.basicExampleList)
-      .filter( value => _.every(keywords, key => value.lowerCaseName.includes(key)) )
+    if (!keywords) return this.allList;
+    return _(this.allList)
+      .filter( value => _.every(keywords, key => value.name.toLowerCase().includes(key)) )
       .value();
   }
 
   render() {
+    const found = this.state.matchedlist.length > 0;
+
     return (
       <div className="react-search-field-demo container">
         <div>
@@ -92,10 +96,20 @@ class App extends Component {
         <div>
           <SearchField
             placeholder="검색어를 입력하세요"
-            onChange={this.onBasicExampleChange}
+            onChange={this.onKeywordChanged}
           />
-          <ExampleList
-            list={this.state.imglist}
+          
+          <div className="list-body" style={ found ? {} : { display: 'none' } }>
+            <ul>{this.state.matchedlist.length} 개의 결과가 있습니다.</ul>
+          </div>
+          <div className="list-body" style={ !found && this.state.keywords ? {} : { display: 'none' } }>
+            <ul>결과가 없어요 ㅠㅠ</ul>
+          </div>
+          <div className="list-body" style={ !found && !this.state.keywords ? {} : { display: 'none' } }>
+            <ul>로딩중입니다...</ul>
+          </div>
+          <ImageList
+            list={_.take(this.state.matchedlist, this.state.imgcnt)}
             keywords={this.state.keywords}
           />
         </div>

@@ -4,10 +4,8 @@
   "description": "This is a simple search page for otome domain meme",
   "main": "dist/index.min.js",
   "scripts": {
-    "build:component": "rm -rf dist/ && webpack -p --progress --config=webpack.production.config.js",
-    "build:docs": "rm -rf docs/ && webpack -p --progress ",
-    "build": "npm run build:component && npm run build:docs",
-    "start": "npm run build:docs && webpack-dev-server",
+    "build": "rm -rf docs/ && webpack -p --progress",
+    "start": "npm run build && webpack-dev-server",
     "test": "jest"
   },
   "keywords": [
@@ -25,9 +23,10 @@
     "hangul-js": "^0.2.6",
     "lodash": "^4.17.15",
     "prop-types": "15.7.2",
-    "react": "16.6.3",
-    "react-dom": "16.6.3",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
     "react-highlight-words": "^0.16.0",
+    "react-search-field": "^1.0.0",
     "typeco": "^1.0.0"
   },
   "devDependencies": {

@@ -45,8 +45,9 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: path.join(__dirname, 'src/docs/index.html'),
     }),
-    new CopyWebpackPlugin([{
-      from: path.join(__dirname, 'src/docs/react-search-field.png'),
-    }]),
+    new CopyWebpackPlugin([
+      {from: path.join(__dirname, 'src/docs/favicon.ico'), to: path.join(__dirname, 'docs/')},
+      {from: path.join(__dirname, 'src/docs/logo.png'), to: path.join(__dirname, 'docs/')},
+    ]),
   ],
 };
