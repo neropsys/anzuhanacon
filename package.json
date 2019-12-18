@@ -4,7 +4,7 @@
   "description": "This is a simple search page for otome domain meme",
   "main": "dist/index.min.js",
   "scripts": {
-    "build": "rm -rf docs/ && webpack -p --progress",
+    "build": "rd /s /q \"docs/\" && webpack -p --progress",
     "start": "npm run build && webpack-dev-server",
     "test": "jest"
   },
